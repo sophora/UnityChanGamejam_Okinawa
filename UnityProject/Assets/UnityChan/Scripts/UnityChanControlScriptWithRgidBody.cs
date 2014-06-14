@@ -48,11 +48,14 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 	private Transform mRightHand;
 	private Transform mLeftHand;
 
+	private float mHelth;
+
 // アニメーター各ステートへの参照
 	static int idleState = Animator.StringToHash("Base Layer.Idle");
 	static int locoState = Animator.StringToHash("Base Layer.Locomotion");
 	static int jumpState = Animator.StringToHash("Base Layer.Jump");
 	static int restState = Animator.StringToHash("Base Layer.Rest");
+	static int Attack_001_State = Animator.StringToHash("Base Layer.Attack_001");
 
 // 初期化
 	void Start ()
@@ -76,20 +79,26 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
     {
     	if (Input.GetButtonDown("Attack_001"))
     	{
-    		Transform aAttackObject = (Transform) Instantiate(Attack_001, anim.bodyPosition + (transform.forward * 1.0f), Quaternion.identity) as Transform;
-    		AttackBase aAttack = aAttackObject.GetComponent<Attack_001>();
-    		if (aAttack == null) { return; }
-    		Rigidbody aAttackBody = aAttack.GetComponent<Rigidbody>();
-    		if (aAttackBody != null)
-    		{
-    			Vector3 aDirecrion = transform.forward;
-    			aAttackBody.AddForce(aDirecrion * aAttack.ShotSpeed, ForceMode.VelocityChange);
-    		}
-
+    		StartCoroutine(Attack_001Process());
     	}
+    }
 
+    private IEnumerator Attack_001Process()
+    {
+    	yield return null;
+    	anim.SetTrigger("Attack_001");
 
+    	yield return new WaitForSeconds(0.5f);
 
+		Transform aAttackObject = (Transform) Instantiate(Attack_001, anim.bodyPosition + (transform.forward * 1.0f), Quaternion.identity) as Transform;
+		AttackBase aAttack = aAttackObject.GetComponent<Attack_001>();
+		if (aAttack == null) { yield break; }
+		Rigidbody aAttackBody = aAttack.GetComponent<Rigidbody>();
+		if (aAttackBody != null)
+		{
+			Vector3 aDirecrion = transform.forward;
+			aAttackBody.AddForce(aDirecrion * aAttack.ShotSpeed, ForceMode.VelocityChange);
+		}
     }
 
 // 以下、メイン処理.リジッドボディと絡めるので、FixedUpdate内で処理を行う.
@@ -117,7 +126,10 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 		currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// 参照用のステート変数にBase Layer (0)の現在のステートを設定する
 		rb.useGravity = true;//ジャンプ中に重力を切るので、それ以外は重力の影響を受けるようにする
 
-
+    	if (currentBaseState.nameHash == Attack_001_State)
+    	{
+    		return;
+    	}
 
 		// 以下、キャラクターの移動処理
 		velocity = new Vector3(0, 0, v);		// 上下のキー入力からZ軸方向の移動量を取得
