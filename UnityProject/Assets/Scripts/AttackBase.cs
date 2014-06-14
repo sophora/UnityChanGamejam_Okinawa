@@ -21,5 +21,16 @@ public class AttackBase : MonoBehaviour
 		}
 	}
 
+	protected virtual void OnCollisionEnter(Collision collision)
+	{
+		EnemyController aEnemy = collision.gameObject.GetComponent<EnemyController>();
+		if (aEnemy != null)
+		{
+			aEnemy.AddDamage(Damage);
+
+			Destroy(gameObject);
+		}
+	}
+
 	private float mSeconds;
 }

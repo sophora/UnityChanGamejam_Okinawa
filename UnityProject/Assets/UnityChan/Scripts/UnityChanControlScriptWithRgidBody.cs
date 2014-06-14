@@ -101,6 +101,11 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 		}
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+    	Debug.Log(collision.gameObject);
+    }
+
 // 以下、メイン処理.リジッドボディと絡めるので、FixedUpdate内で処理を行う.
 	void FixedUpdate ()
 	{
