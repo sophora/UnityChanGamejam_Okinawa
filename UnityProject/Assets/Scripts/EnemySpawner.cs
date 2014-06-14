@@ -4,7 +4,7 @@ using System.Collections;
 public class EnemySpawner : MonoBehaviour
 {
 
-	public GameObject Enemy_001;
+	public GameObject Enemy;
 
 	// Use this for initialization
 	void Start ()
@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
 		float x = 40.0f * Mathf.Cos(Mathf.PI * rat / 180.0f);
 		float z = 40.0f* Mathf.Sin(Mathf.PI * rat / 180.0f);
 			
-		Instantiate ( Enemy_001, new Vector3(x,3,z),Quaternion.identity );
+		Instantiate ( Enemy, new Vector3(x,3,z),Quaternion.identity );
 	    second = 0.0f; 
 		} 
 

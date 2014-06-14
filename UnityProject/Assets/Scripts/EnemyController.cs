@@ -40,7 +40,10 @@ public class EnemyController : MonoBehaviour
 		rigidbody.position = rigidbody.position + (aPosition.normalized * Speed * Time.fixedDeltaTime);
 
 	}
+	private void OnTriggerEnter(){
+		Destroy(gameObject);
 
+	}
 
 	private bool mIsDeadProcess;
 }
