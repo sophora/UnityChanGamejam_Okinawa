@@ -13,11 +13,12 @@ public class EnemySpawner : MonoBehaviour
 
 	}
 	private float second;
+	public float incidence =  4.0f;
 	// Update is called once per frame
 	void Update ()
 	{
 		second += Time.deltaTime ;
-		if(second > 5.0f){
+		if(second > incidence){
 		float rat = Random.Range(0.0f,360.0f);   
 		float x = 40.0f * Mathf.Cos(Mathf.PI * rat / 180.0f);
 		float z = 40.0f* Mathf.Sin(Mathf.PI * rat / 180.0f);
