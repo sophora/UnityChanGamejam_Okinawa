@@ -12,10 +12,13 @@ public class UnityChanController : MonoBehaviour
 	{
 		if(Input.GetButton("Fire1"))
 		{
+			Debug.Log("AAAAAAAAAAAAAAA");
 
 		}
-		else if(Input.GetButton("Fire2"))
+		else
+		if(Input.GetButton("Fire2"))
 		{
+			Debug.Log(Input.mousePosition);
 
 		}
 	}
