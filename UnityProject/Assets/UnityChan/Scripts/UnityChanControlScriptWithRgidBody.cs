@@ -48,7 +48,7 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 	private Transform mRightHand;
 	private Transform mLeftHand;
 
-	private float mHelth;
+	public int Health;
 
 // アニメーター各ステートへの参照
 	static int idleState = Animator.StringToHash("Base Layer.Idle");
@@ -56,9 +56,22 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 	static int jumpState = Animator.StringToHash("Base Layer.Jump");
 	static int restState = Animator.StringToHash("Base Layer.Rest");
 	static int Attack_001_State = Animator.StringToHash("Base Layer.Attack_001");
+	static int DamageState = Animator.StringToHash("Base Layer.Damage");
+	static int LoseState = Animator.StringToHash("Base Layer.Lose");
 
-// 初期化
-	void Start ()
+	public bool IsDead() { return Health <= 0; }
+
+	public void Win()
+	{
+
+	}
+
+	private IEnumerator WinProcess()
+	{
+		yield return null;
+	}
+
+	private void Start ()
 	{
 		// Animatorコンポーネントを取得する
 		anim = GetComponent<Animator>();
@@ -103,25 +116,43 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-    	Debug.Log(collision.gameObject);
+    	if (IsDead()) { return; }
+
+    	currentBaseState = anim.GetCurrentAnimatorStateInfo(0);
+
+    	if (currentBaseState.nameHash == DamageState)
+    	{
+    		return;
+    	}
+
+		EnemyController aEnemy = collision.gameObject.GetComponent<EnemyController>();
+		if (aEnemy != null)
+		{
+			Health -= 1;
+
+			if (IsDead()) { StartCoroutine(DeadProcess()); }
+			else
+			{
+				anim.SetTrigger("Damage");
+			}
+		}
     }
+
+	private IEnumerator DeadProcess()
+	{
+		if (!IsDead()) { yield break; }
+
+		anim.SetTrigger("Lose");
+
+		yield return new WaitForSeconds(3.0f);
+
+		gameObject.SetActive(false);
+	}
 
 // 以下、メイン処理.リジッドボディと絡めるので、FixedUpdate内で処理を行う.
 	void FixedUpdate ()
 	{
-		/*
-    	if (Input.GetButtonDown("Attack_001"))
-    	{
-    		AttackBase aAttack = Instantiate(Attack_001, transform.position + (transform.forward * 1.0f), Quaternion.identity) as AttackBase;
-    		if (aAttack == null) { return; }
-    		Rigidbody aAttackBody = aAttack.GetComponent<Rigidbody>();
-    		if (aAttackBody != null)
-    		{
-    			Vector3 aDirecrion = transform.forward + Vector3.up;
-    			aAttackBody.AddForce(aDirecrion * aAttack.ShotSpeed, ForceMode.VelocityChange);
-    		}
-    	}
-    	*/
+    	if (IsDead()) { return; }
 
 		float h = Input.GetAxis("Horizontal");				// 入力デバイスの水平軸をhで定義
 		float v = Input.GetAxis("Vertical");				// 入力デバイスの垂直軸をvで定義
@@ -132,6 +163,10 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 		rb.useGravity = true;//ジャンプ中に重力を切るので、それ以外は重力の影響を受けるようにする
 
     	if (currentBaseState.nameHash == Attack_001_State)
+    	{
+    		return;
+    	}
+    	if (currentBaseState.nameHash == DamageState)
     	{
     		return;
     	}
@@ -244,6 +279,7 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 		}
 	}
 
+	/*
 	void OnGUI()
 	{
 		GUI.Box(new Rect(Screen.width -260, 10 ,250 ,150), "Interaction");
@@ -254,6 +290,7 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 		GUI.Label(new Rect(Screen.width -245,110,250,30),"Left Control : Front Camera");
 		GUI.Label(new Rect(Screen.width -245,130,250,30),"Alt : LookAt Camera");
 	}
+	*/
 
 
 	// キャラクターのコライダーサイズのリセット関数
