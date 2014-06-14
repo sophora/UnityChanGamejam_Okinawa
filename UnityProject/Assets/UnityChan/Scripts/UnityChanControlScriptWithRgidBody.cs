@@ -14,6 +14,8 @@ using System.Collections;
 public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 {
 
+	public Transform Attack_001;
+
 	public float animSpeed = 1.5f;				// アニメーション再生速度設定
 	public float lookSmoother = 3.0f;			// a smoothing setting for camera motion
 	public bool useCurves = true;				// Mecanimでカーブ調整を使うか設定する
@@ -43,6 +45,9 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 
 	private GameObject cameraObject;	// メインカメラへの参照
 
+	private Transform mRightHand;
+	private Transform mLeftHand;
+
 // アニメーター各ステートへの参照
 	static int idleState = Animator.StringToHash("Base Layer.Idle");
 	static int locoState = Animator.StringToHash("Base Layer.Locomotion");
@@ -62,12 +67,48 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 		// CapsuleColliderコンポーネントのHeight、Centerの初期値を保存する
 		orgColHight = col.height;
 		orgVectColCenter = col.center;
+
+		mRightHand = anim.GetBoneTransform(HumanBodyBones.RightHand);
+		mLeftHand  = anim.GetBoneTransform(HumanBodyBones.LeftHand );
     }
 
+    private void Update()
+    {
+    	if (Input.GetButtonDown("Attack_001"))
+    	{
+    		Transform aAttackObject = (Transform) Instantiate(Attack_001, anim.bodyPosition + (transform.forward * 1.0f), Quaternion.identity) as Transform;
+    		AttackBase aAttack = aAttackObject.GetComponent<Attack_001>();
+    		if (aAttack == null) { return; }
+    		Rigidbody aAttackBody = aAttack.GetComponent<Rigidbody>();
+    		if (aAttackBody != null)
+    		{
+    			Vector3 aDirecrion = transform.forward;
+    			aAttackBody.AddForce(aDirecrion * aAttack.ShotSpeed, ForceMode.VelocityChange);
+    		}
+
+    	}
+
+
+
+    }
 
 // 以下、メイン処理.リジッドボディと絡めるので、FixedUpdate内で処理を行う.
 	void FixedUpdate ()
 	{
+		/*
+    	if (Input.GetButtonDown("Attack_001"))
+    	{
+    		AttackBase aAttack = Instantiate(Attack_001, transform.position + (transform.forward * 1.0f), Quaternion.identity) as AttackBase;
+    		if (aAttack == null) { return; }
+    		Rigidbody aAttackBody = aAttack.GetComponent<Rigidbody>();
+    		if (aAttackBody != null)
+    		{
+    			Vector3 aDirecrion = transform.forward + Vector3.up;
+    			aAttackBody.AddForce(aDirecrion * aAttack.ShotSpeed, ForceMode.VelocityChange);
+    		}
+    	}
+    	*/
+
 		float h = Input.GetAxis("Horizontal");				// 入力デバイスの水平軸をhで定義
 		float v = Input.GetAxis("Vertical");				// 入力デバイスの垂直軸をvで定義
 		anim.SetFloat("Speed", v);							// Animator側で設定している"Speed"パラメタにvを渡す
