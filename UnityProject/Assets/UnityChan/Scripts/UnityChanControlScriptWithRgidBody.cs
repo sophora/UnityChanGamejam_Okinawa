@@ -14,7 +14,10 @@ using System.Collections;
 public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 {
 
-	public Transform Attack_001;
+	public Transform  Attack_001;
+	public Transform  Attack_002;
+	public GameObject SE_Attack_001;
+	public GameObject SE_Attack_002;
 
 	public float animSpeed = 1.5f;				// アニメーション再生速度設定
 	public float lookSmoother = 3.0f;			// a smoothing setting for camera motion
@@ -47,6 +50,9 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 
 	private Transform mRightHand;
 	private Transform mLeftHand;
+
+	private bool mIsAttack001;
+	private bool mIsAttack002;
 
 	public int Health;
 
@@ -90,14 +96,19 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 
     private void Update()
     {
-    	if (Input.GetButtonDown("Attack_001"))
+    	if (!mIsAttack001 && Input.GetButtonDown("Attack_001"))
     	{
     		StartCoroutine(Attack_001Process());
+    	}
+    	if (!mIsAttack002 && Input.GetButtonDown("Attack_002"))
+    	{
+    		StartCoroutine(Attack_002Process());
     	}
     }
 
     private IEnumerator Attack_001Process()
     {
+    	mIsAttack001 = true;
     	yield return null;
     	anim.SetTrigger("Attack_001");
 
@@ -110,8 +121,35 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 		if (aAttackBody != null)
 		{
 			Vector3 aDirecrion = transform.forward;
+			aAttackBody.transform.LookAt(aDirecrion);
 			aAttackBody.AddForce(aDirecrion * aAttack.ShotSpeed, ForceMode.VelocityChange);
+			Instantiate(SE_Attack_001);
+
+			yield return new WaitForSeconds(aAttack.CoolDown );
 		}
+		mIsAttack001 = false;
+    }
+
+    private IEnumerator Attack_002Process()
+    {
+    	mIsAttack002 = true;
+    	yield return null;
+    	anim.SetTrigger("Attack_002");
+
+		Transform aAttackObject = (Transform) Instantiate(Attack_002, anim.bodyPosition + (transform.forward * 1.0f), Quaternion.identity) as Transform;
+		AttackBase aAttack = aAttackObject.GetComponent<Attack_002>();
+		if (aAttack == null) { yield break; }
+		Rigidbody aAttackBody = aAttack.GetComponent<Rigidbody>();
+		if (aAttackBody != null)
+		{
+			Vector3 aDirecrion = transform.forward;
+			aAttackBody.transform.LookAt(aDirecrion);
+			aAttackBody.AddForce(aDirecrion * aAttack.ShotSpeed, ForceMode.VelocityChange);
+			Instantiate(SE_Attack_002);
+
+			yield return new WaitForSeconds(aAttack.CoolDown);
+		}
+		mIsAttack002 = false;
     }
 
     private void OnCollisionEnter(Collision collision)
