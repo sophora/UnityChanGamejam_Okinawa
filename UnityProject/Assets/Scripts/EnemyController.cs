@@ -55,6 +55,7 @@ public class EnemyController : MonoBehaviour
 		float distance= Vector3.Distance(Vector3.zero, transform.position);
 
 		if(distance < 2.0f){
+			GameObject.FindWithTag("GameManager").GetComponent<GameManager>().AddDamage(1);
 			Destroy(gameObject);
 		}
 	}
