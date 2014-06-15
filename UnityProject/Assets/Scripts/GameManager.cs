@@ -106,12 +106,15 @@ public class GameManager : MonoBehaviour
 
 	void OnGUI()
 	{
+		int aScore = (mScoreManager != null) ? mScoreManager.GetScore() : 0;
+
 		if (!IsPlaying && !mIsInResulrProduction && mIsGameOver)
 		{
-			if (GUI.Button(new Rect((int)(Screen.width * 0.5) - 125, (int)(Screen.height * 0.5), 250, 60), "Play"))
+			if (GUI.Button(new Rect((int)(Screen.width * 0.5) - 125, (int)(Screen.height * 0.5), 250, 60), "Score : " + aScore.ToString()))
 			{
 				Application.LoadLevel("Main");
 			}
+
 		}
 
 
@@ -122,7 +125,7 @@ public class GameManager : MonoBehaviour
 		}
 		*/
 
-		int aScore = (mScoreManager != null) ? mScoreManager.GetScore() : 0;
+
 
 		System.TimeSpan aTimeSpan = new System.TimeSpan(0,0, Mathf.CeilToInt(mSeconds));
 		string aMinutes = string.Format("{0:00}", aTimeSpan.Minutes);
