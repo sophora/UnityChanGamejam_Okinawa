@@ -6,7 +6,6 @@ public class EnemySpawner : MonoBehaviour
 
 	public GameObject Enemy;
 
-	/*
 	// Use this for initialization
 	void Start ()
 	{
@@ -29,5 +28,4 @@ public class EnemySpawner : MonoBehaviour
 		}
 
 	}
-	*/
 }
