@@ -1,0 +1,139 @@
+fileFormatVersion: 2
+guid: 18a5ea1fd99234046838d9047a7db200
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: BG
+    100002: BG_AB
+    100004: bottom_wall1
+    100006: center_cloth
+    100008: center_towor
+    100010: ground
+    100012: left_cloth
+    100014: left_towor
+    100016: left_wall
+    100018: planter1
+    100020: planter2
+    100022: right_cloth
+    100024: right_towor
+    100026: right_wall
+    100028: sky
+    100030: //RootNode
+    100032: top_wall
+    400000: BG
+    400002: BG_AB
+    400004: bottom_wall1
+    400006: center_cloth
+    400008: center_towor
+    400010: ground
+    400012: left_cloth
+    400014: left_towor
+    400016: left_wall
+    400018: planter1
+    400020: planter2
+    400022: right_cloth
+    400024: right_towor
+    400026: right_wall
+    400028: sky
+    400030: //RootNode
+    400032: top_wall
+    2300000: BG
+    2300002: BG_AB
+    2300004: bottom_wall1
+    2300006: center_cloth
+    2300008: center_towor
+    2300010: ground
+    2300012: left_cloth
+    2300014: left_towor
+    2300016: left_wall
+    2300018: planter1
+    2300020: planter2
+    2300022: right_cloth
+    2300024: right_towor
+    2300026: right_wall
+    2300028: top_wall
+    3300000: BG
+    3300002: BG_AB
+    3300004: bottom_wall1
+    3300006: center_cloth
+    3300008: center_towor
+    3300010: ground
+    3300012: left_cloth
+    3300014: left_towor
+    3300016: left_wall
+    3300018: planter1
+    3300020: planter2
+    3300022: right_cloth
+    3300024: right_towor
+    3300026: right_wall
+    3300028: top_wall
+    4300000: center_towor
+    4300002: center_cloth
+    4300004: BG_AB
+    4300006: BG
+    4300008: ground
+    4300010: right_towor
+    4300012: left_towor
+    4300014: right_cloth
+    4300016: left_cloth
+    4300018: right_wall
+    4300020: left_wall
+    4300022: top_wall
+    4300024: planter1
+    4300026: planter2
+    4300028: bottom_wall1
+    9500000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
