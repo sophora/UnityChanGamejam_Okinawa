@@ -5,21 +5,32 @@ using System.Collections;
 
 public class EnemyController : MonoBehaviour
 {
+	public int        ScorePoint;
 	public GameObject EnemyDead;
+	public GameObject DeathEffect;
 	public float Speed = 1.0f;
 	public float attackpower = 1.0f;
 	public float enemyhealth = 1.0f;
 
 	public bool IsDead() { return enemyhealth <= 0.0f; }
 
-	public void AddDamage(float iDamage)
+	public bool AddDamage(float iDamage)
 	{
-		if (IsDead()) { return; }
+		if (IsDead()) { return true; }
 
 		enemyhealth -= iDamage;
 		if (enemyhealth < 0.0f) { enemyhealth = 0.0f; }
 
-		if (IsDead()) { StartCoroutine(DeadProcess()); }
+		if (IsDead())
+		{
+			ScoreManager aScoreManager = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+			if (aScoreManager != null)
+			{
+				aScoreManager.AddScore(ScorePoint);
+			}
+			StartCoroutine(DeadProcess());
+		}
+		return IsDead();
 	}
 
 	private IEnumerator DeadProcess()
@@ -27,6 +38,7 @@ public class EnemyController : MonoBehaviour
 		if (!IsDead()) { yield break; }
 		mIsDeadProcess = true;
 		Instantiate (EnemyDead, Vector3.zero,Quaternion.identity);
+		Instantiate (DeathEffect, transform.position, Quaternion.identity);
 		Destroy(gameObject);
 	}
 

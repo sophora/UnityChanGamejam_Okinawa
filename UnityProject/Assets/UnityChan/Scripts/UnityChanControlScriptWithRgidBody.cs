@@ -97,6 +97,12 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 
     private void Update()
     {
+    	currentBaseState = anim.GetCurrentAnimatorStateInfo(0);
+
+    	if (currentBaseState.nameHash == Attack_001_State) { return; }
+    	if (currentBaseState.nameHash == Attack_002_State) { return; }
+    	if (currentBaseState.nameHash == DamageState     ) { return; }
+
     	if (!mIsAttack001 && Input.GetButtonDown("Attack_001"))
     	{
     		StartCoroutine(Attack_001Process());
@@ -137,7 +143,7 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
     	yield return null;
     	anim.SetTrigger("Attack_002");
 
-		Transform aAttackObject = (Transform) Instantiate(Attack_002, anim.bodyPosition + (transform.forward * 1.0f), Quaternion.identity) as Transform;
+		Transform aAttackObject = (Transform) Instantiate(Attack_002, anim.bodyPosition + (transform.forward * 3.0f), Quaternion.identity) as Transform;
 		AttackBase aAttack = aAttackObject.GetComponent<Attack_002>();
 		if (aAttack == null) { yield break; }
 		Rigidbody aAttackBody = aAttack.GetComponent<Rigidbody>();

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
 	private void Begin()
 	{
+		mScoreManager.SetScore(0);
 		SetEnabledEnemySpawner(true);
 		BGM_Battle.Play();
 		IsPlaying   = true;
@@ -19,6 +20,30 @@ public class GameManager : MonoBehaviour
 		mUnityChan = GameObject.FindWithTag("UnityChan").GetComponent<UnityChanControlScriptWithRgidBody>();
 
 	}
+
+	private void Result(bool iIsClear)
+	{
+		StartCoroutine(ResultProcess(iIsClear));
+	}
+
+	private IEnumerator ResultProcess(bool iIsClear)
+	{
+		SetEnabledEnemySpawner(false);
+
+		if (iIsClear)
+		{
+			BGM_Battle.Stop();
+			BGM_Clear .Play();
+		}
+		else
+		{
+			BGM_Battle.Stop();
+			BGM_Failed.Play();
+		}
+
+		yield return null;
+	}
+
 
 	private void SetEnabledEnemySpawner(bool iIsEnabled)
 	{
@@ -37,8 +62,7 @@ public class GameManager : MonoBehaviour
 		{
 			mIsGameOver = true;
 			IsPlaying  = false;
-			BGM_Battle.Stop();
-			BGM_Failed.Play();
+			Result(false);
 			return;
 		}
 
@@ -47,16 +71,14 @@ public class GameManager : MonoBehaviour
 		{
 			mIsGameOver = true;
 			IsPlaying  = false;
-			BGM_Battle.Stop();
-			BGM_Clear .Play();
-
-			SetEnabledEnemySpawner(false);
+			Result(true);
 			return;
 		}
 	}
 
 	private IEnumerator Start()
 	{
+		mScoreManager = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 		yield return null;
 		BGM_Battle.Stop();
 		SetEnabledEnemySpawner(false);
@@ -73,21 +95,39 @@ public class GameManager : MonoBehaviour
 
 	void OnGUI()
 	{
+		/*
+		if (mScoreManager == null)
+		{
+			mScoreManager = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+		}
+		*/
+
+		int aScore = (mScoreManager != null) ? mScoreManager.GetScore() : 0;
+
 		System.TimeSpan aTimeSpan = new System.TimeSpan(0,0, Mathf.CeilToInt(mSeconds));
 		string aMinutes = string.Format("{0:00}", aTimeSpan.Minutes);
 		string aSeconds = string.Format("{0:00}", aTimeSpan.Seconds);
 
-		GUI.Box  (new Rect(Screen.width -260, 10, 250, 20), "Time   " + aMinutes + ":" + aSeconds);
-		//GUI.Box(new Rect(Screen.width -260, 10 ,250 ,150), "Interaction");
-		//GUI.Label(new Rect(Screen.width -245,30,250,30),"Up/Down Arrow : Go Forwald/Go Back");
-		//GUI.Label(new Rect(Screen.width -245,50,250,30),"Left/Right Arrow : Turn Left/Turn Right");
-		//GUI.Label(new Rect(Screen.width -245,70,250,30),"Hit Space key while Running : Jump");
-		//GUI.Label(new Rect(Screen.width -245,90,250,30),"Hit Spase key while Stopping : Rest");
-		//GUI.Label(new Rect(Screen.width -245,110,250,30),"Left Control : Front Camera");
-		//GUI.Label(new Rect(Screen.width -245,130,250,30),"Alt : LookAt Camera");
+		if (mIsGameOver)
+		{
+
+		}
+		else
+		{
+			GUI.Box  (new Rect(Screen.width -260, 10, 250, 60), "");
+			//GUI.Box(new Rect(Screen.width -260, 10 ,250 ,150), "Interaction");
+			GUI.Label(new Rect(Screen.width -250, 20, 250, 20), " Time : " + aMinutes + ":" + aSeconds);
+			GUI.Label(new Rect(Screen.width -250, 40, 250, 20), "Score : " + aScore.ToString());
+			//GUI.Label(new Rect(Screen.width -245,50,250,30),"Left/Right Arrow : Turn Left/Turn Right");
+			//GUI.Label(new Rect(Screen.width -245,70,250,30),"Hit Space key while Running : Jump");
+			//GUI.Label(new Rect(Screen.width -245,90,250,30),"Hit Spase key while Stopping : Rest");
+			//GUI.Label(new Rect(Screen.width -245,110,250,30),"Left Control : Front Camera");
+			//GUI.Label(new Rect(Screen.width -245,130,250,30),"Alt : LookAt Camera");
+		}
 	}
 
 	private UnityChanControlScriptWithRgidBody mUnityChan;
 	private bool  mIsGameOver;
 	private float mSeconds;
+	private ScoreManager mScoreManager;
 }
