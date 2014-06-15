@@ -3,19 +3,21 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-	public UnityChanControlScriptWithRgidBody UnityChan;
 	public EnemySpawner[]                     EnemySpawners;
 	public float                              GameSeconds;
 	public bool                               IsPlaying;
-	public GameObject                         BGM_Battle;
-	public GameObject                         BGM_Clear;
-	public GameObject                         BGM_Failed;
+	public AudioSource                        BGM_Battle;
+	public AudioSource                        BGM_Clear;
+	public AudioSource                        BGM_Failed;
 
 	private void Begin()
 	{
 		SetEnabledEnemySpawner(true);
-		BGM_Battle.SetActive(true);
-		IsPlaying = true;
+		BGM_Battle.Play();
+		IsPlaying   = true;
+		mIsGameOver = false;
+		mUnityChan = GameObject.FindWithTag("UnityChan").GetComponent<UnityChanControlScriptWithRgidBody>();
+
 	}
 
 	private void SetEnabledEnemySpawner(bool iIsEnabled)
@@ -26,15 +28,17 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	private void Update ()
+	private void Update()
 	{
 		if (!IsPlaying) { return; }
 		if (mIsGameOver) { return; }
-		if (UnityChan == null || UnityChan.IsDead())
+
+		if (mUnityChan != null && mUnityChan.IsDead())
 		{
 			mIsGameOver = true;
 			IsPlaying  = false;
-			Instantiate(BGM_Failed);
+			BGM_Battle.Stop();
+			BGM_Failed.Play();
 			return;
 		}
 
@@ -43,14 +47,18 @@ public class GameManager : MonoBehaviour
 		{
 			mIsGameOver = true;
 			IsPlaying  = false;
-			Instantiate(BGM_Clear);
+			BGM_Battle.Stop();
+			BGM_Clear .Play();
+
+			SetEnabledEnemySpawner(false);
 			return;
 		}
 	}
 
 	private IEnumerator Start()
 	{
-		BGM_Battle.SetActive(false);
+		yield return null;
+		BGM_Battle.Stop();
 		SetEnabledEnemySpawner(false);
 		yield return new WaitForSeconds(5.0f);
 		Begin();
@@ -79,6 +87,7 @@ public class GameManager : MonoBehaviour
 		//GUI.Label(new Rect(Screen.width -245,130,250,30),"Alt : LookAt Camera");
 	}
 
+	private UnityChanControlScriptWithRgidBody mUnityChan;
 	private bool  mIsGameOver;
 	private float mSeconds;
 }
