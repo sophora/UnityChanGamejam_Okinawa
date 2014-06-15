@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
 	private IEnumerator ResultProcess(bool iIsClear)
 	{
+		mIsInResulrProduction = true;
 		SetEnabledEnemySpawner(false);
 
 		if (iIsClear)
@@ -42,6 +43,8 @@ public class GameManager : MonoBehaviour
 		}
 
 		yield return null;
+
+		mIsInResulrProduction = false;
 	}
 
 
@@ -82,8 +85,6 @@ public class GameManager : MonoBehaviour
 		yield return null;
 		BGM_Battle.Stop();
 		SetEnabledEnemySpawner(false);
-		yield return new WaitForSeconds(5.0f);
-		Begin();
 	}
 
 	private void Awake()
@@ -95,6 +96,15 @@ public class GameManager : MonoBehaviour
 
 	void OnGUI()
 	{
+		if (!IsPlaying && !mIsInResulrProduction)
+		{
+			if (GUI.Button(new Rect((int)(Screen.width * 0.5) - 125, (int)(Screen.height * 0.5), 250, 60), "Play"))
+			{
+				Begin();
+			}
+		}
+
+
 		/*
 		if (mScoreManager == null)
 		{
@@ -128,6 +138,7 @@ public class GameManager : MonoBehaviour
 
 	private UnityChanControlScriptWithRgidBody mUnityChan;
 	private bool  mIsGameOver;
+	private bool  mIsInResulrProduction;
 	private float mSeconds;
 	private ScoreManager mScoreManager;
 }

@@ -13,6 +13,7 @@ public class Attack_002 : AttackBase
 			{
 				mTargets.Enqueue(aEnemy);
 			}
+			aEnemy.rigidbody.AddForce(Vector3.up * 10.0f, ForceMode.Acceleration);
 		}
 	}
 

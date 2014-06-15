@@ -48,9 +48,9 @@ public class EnemyController : MonoBehaviour
 
 		transform.LookAt(Vector3.zero);
 
-		Vector3 aPosition = Vector3.zero - rigidbody.position;
+		Vector3 aPosition = Vector3.zero - transform.localPosition;
 
-		rigidbody.position = rigidbody.position + (aPosition.normalized * Speed * Time.fixedDeltaTime);
+		transform.localPosition = transform.localPosition + (aPosition.normalized * Speed * Time.fixedDeltaTime);
 
 		float distance= Vector3.Distance(Vector3.zero, transform.position);
 
