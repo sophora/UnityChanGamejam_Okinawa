@@ -27,9 +27,9 @@ public class EnemyController : MonoBehaviour
 		if (!IsDead()) { yield break; }
 		mIsDeadProcess = true;
 		Destroy(gameObject);
-	}
+	} 
 	void OnDestroy(){
-		Instantiate ( EnemyDead,Vector3.zero,Quaternion.identity );
+		Instantiate ( EnemyDead, Vector3.zero,Quaternion.identity );
 		}
 
 	void FixedUpdate()
