@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 	public float                              GameSeconds;
 	public bool                               IsPlaying;
 	public GameObject                         BGM_Battle;
+	public GameObject                         BGM_Clear;
+	public GameObject                         BGM_Failed;
 
 	private void Begin()
 	{
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
 		{
 			mIsGameOver = true;
 			IsPlaying  = false;
+			Instantiate(BGM_Failed);
 			return;
 		}
 
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour
 		{
 			mIsGameOver = true;
 			IsPlaying  = false;
+			Instantiate(BGM_Clear);
 			return;
 		}
 	}

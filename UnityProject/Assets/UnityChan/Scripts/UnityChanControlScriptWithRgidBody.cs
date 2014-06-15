@@ -62,6 +62,7 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 	static int jumpState = Animator.StringToHash("Base Layer.Jump");
 	static int restState = Animator.StringToHash("Base Layer.Rest");
 	static int Attack_001_State = Animator.StringToHash("Base Layer.Attack_001");
+	static int Attack_002_State = Animator.StringToHash("Base Layer.Attack_002");
 	static int DamageState = Animator.StringToHash("Base Layer.Damage");
 	static int LoseState = Animator.StringToHash("Base Layer.Lose");
 
@@ -121,11 +122,11 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 		if (aAttackBody != null)
 		{
 			Vector3 aDirecrion = transform.forward;
-			aAttackBody.transform.LookAt(aDirecrion);
+			aAttackBody.MoveRotation(Quaternion.LookRotation(aDirecrion * aAttack.ShotSpeed));
 			aAttackBody.AddForce(aDirecrion * aAttack.ShotSpeed, ForceMode.VelocityChange);
 			Instantiate(SE_Attack_001);
 
-			yield return new WaitForSeconds(aAttack.CoolDown );
+			yield return new WaitForSeconds(aAttack.CoolDown);
 		}
 		mIsAttack001 = false;
     }
@@ -192,22 +193,19 @@ public class UnityChanControlScriptWithRgidBody : MonoBehaviour
 	{
     	if (IsDead()) { return; }
 
+		currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// 参照用のステート変数にBase Layer (0)の現在のステートを設定する
+
+
 		float h = Input.GetAxis("Horizontal");				// 入力デバイスの水平軸をhで定義
 		float v = Input.GetAxis("Vertical");				// 入力デバイスの垂直軸をvで定義
 		anim.SetFloat("Speed", v);							// Animator側で設定している"Speed"パラメタにvを渡す
 		anim.SetFloat("Direction", h); 						// Animator側で設定している"Direction"パラメタにhを渡す
 		anim.speed = animSpeed;								// Animatorのモーション再生速度に animSpeedを設定する
-		currentBaseState = anim.GetCurrentAnimatorStateInfo(0);	// 参照用のステート変数にBase Layer (0)の現在のステートを設定する
 		rb.useGravity = true;//ジャンプ中に重力を切るので、それ以外は重力の影響を受けるようにする
 
-    	if (currentBaseState.nameHash == Attack_001_State)
-    	{
-    		return;
-    	}
-    	if (currentBaseState.nameHash == DamageState)
-    	{
-    		return;
-    	}
+    	if (currentBaseState.nameHash == Attack_001_State) { return; }
+    	if (currentBaseState.nameHash == Attack_002_State) { return; }
+    	if (currentBaseState.nameHash == DamageState     ) { return; }
 
 		// 以下、キャラクターの移動処理
 		velocity = new Vector3(0, 0, v);		// 上下のキー入力からZ軸方向の移動量を取得

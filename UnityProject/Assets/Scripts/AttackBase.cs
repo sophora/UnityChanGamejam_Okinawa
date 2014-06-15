@@ -21,6 +21,7 @@ public class AttackBase : MonoBehaviour
 		}
 	}
 
+	/*
 	protected virtual void OnCollisionEnter(Collision collision)
 	{
 		EnemyController aEnemy = collision.gameObject.GetComponent<EnemyController>();
@@ -31,6 +32,7 @@ public class AttackBase : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
+	*/
 
 	private float mSeconds;
 }

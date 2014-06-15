@@ -26,11 +26,9 @@ public class EnemyController : MonoBehaviour
 	{
 		if (!IsDead()) { yield break; }
 		mIsDeadProcess = true;
+		Instantiate (EnemyDead, Vector3.zero,Quaternion.identity);
 		Destroy(gameObject);
-	} 
-	void OnDestroy(){
-		Instantiate ( EnemyDead, Vector3.zero,Quaternion.identity );
-		}
+	}
 
 	void FixedUpdate()
 	{
@@ -48,9 +46,6 @@ public class EnemyController : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
-	//private void OnTriggerEnter(){
-	//	
-	//}
 
 	private bool mIsDeadProcess;
 }
