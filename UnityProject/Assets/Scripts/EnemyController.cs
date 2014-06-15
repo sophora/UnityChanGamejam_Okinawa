@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//[ RequireComponent(typeof(AudioSource))]
+
 public class EnemyController : MonoBehaviour
 {
+	public GameObject EnemyDead;
 	public float Speed = 1.0f;
 	public float attackpower = 1.0f;
 	public float enemyhealth = 1.0f;
@@ -23,11 +26,11 @@ public class EnemyController : MonoBehaviour
 	{
 		if (!IsDead()) { yield break; }
 		mIsDeadProcess = true;
-
-
 		Destroy(gameObject);
 	}
-
+	void OnDestroy(){
+		Instantiate ( EnemyDead,Vector3.zero,Quaternion.identity );
+		}
 
 	void FixedUpdate()
 	{
@@ -39,11 +42,15 @@ public class EnemyController : MonoBehaviour
 
 		rigidbody.position = rigidbody.position + (aPosition.normalized * Speed * Time.fixedDeltaTime);
 
-	}
-	private void OnTriggerEnter(){
-		Destroy(gameObject);
+		float distance= Vector3.Distance(Vector3.zero, transform.position);
 
+		if(distance < 2.0f){
+			Destroy(gameObject);
+		}
 	}
+	//private void OnTriggerEnter(){
+	//	
+	//}
 
 	private bool mIsDeadProcess;
 }
